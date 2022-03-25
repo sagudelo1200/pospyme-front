@@ -1,6 +1,22 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { lineChartData, lineChartOptions } from "variables/charts";
 
 class LineChart extends React.Component {
   constructor(props) {
@@ -14,8 +30,8 @@ class LineChart extends React.Component {
 
   componentDidMount() {
     this.setState({
-      chartData: lineChartData,
-      chartOptions: lineChartOptions,
+      chartData: this.props.chartData,
+      chartOptions: this.props.chartOptions,
     });
   }
 

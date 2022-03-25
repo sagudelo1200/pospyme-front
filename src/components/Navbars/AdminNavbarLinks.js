@@ -1,3 +1,20 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 // Chakra Icons
 import { BellIcon, SearchIcon } from "@chakra-ui/icons";
 // Chakra Imports
@@ -28,7 +45,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import routes from "routes.js";
-import { SearchBar } from './SearchBar/SearchBar';
 
 export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
@@ -50,7 +66,6 @@ export default function HeaderLinks(props) {
       pe={{ sm: "0px", md: "16px" }}
       w={{ sm: "100%", md: "auto" }}
       alignItems="center"
-      flexDirection="row"
     >
       <InputGroup
         cursor="pointer"
@@ -90,7 +105,7 @@ export default function HeaderLinks(props) {
           fontSize="xs"
           py="11px"
           color={mainText}
-          placeholder="Buscar..."
+          placeholder="Type here..."
           borderRadius="inherit"
         />
       </InputGroup>
@@ -101,22 +116,11 @@ export default function HeaderLinks(props) {
           me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
-          rightIcon={
-            document.documentElement.dir ? (
-              ""
-            ) : (
-              <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-            )
-          }
           leftIcon={
-            document.documentElement.dir ? (
-              <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-            ) : (
-              ""
-            )
+            <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
           }
         >
-          <Text display={{ sm: "none", md: "flex" }}>Ingresar</Text>
+          <Text display={{ sm: "none", md: "flex" }}>Sign In</Text>
         </Button>
       </NavLink>
       <SidebarResponsive
@@ -128,7 +132,6 @@ export default function HeaderLinks(props) {
       />
       <SettingsIcon
         cursor="pointer"
-        ms={{ base: "16px", xl: "0px" }}
         me="16px"
         ref={settingsRef}
         onClick={props.onOpen}
@@ -144,26 +147,26 @@ export default function HeaderLinks(props) {
           <Flex flexDirection="column">
             <MenuItem borderRadius="8px" mb="10px">
               <ItemContent
-                time="hace 13 minutos"
-                info="de Alicia"
-                boldInfo="Nuevo Mensaje"
+                time="13 minutes ago"
+                info="from Alicia"
+                boldInfo="New Message"
                 aName="Alicia"
                 aSrc={avatar1}
               />
             </MenuItem>
             <MenuItem borderRadius="8px" mb="10px">
               <ItemContent
-                time="hace 2 días"
-                info="por Josh Henry"
-                boldInfo="Nuevo Producto"
+                time="2 days ago"
+                info="by Josh Henry"
+                boldInfo="New Album"
                 aName="Josh Henry"
                 aSrc={avatar2}
               />
             </MenuItem>
             <MenuItem borderRadius="8px">
               <ItemContent
-                time="hace 3 días"
-                info="Pago reliazado correctamente!"
+                time="3 days ago"
+                info="Payment succesfully completed!"
                 boldInfo=""
                 aName="Kara"
                 aSrc={avatar3}

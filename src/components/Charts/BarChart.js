@@ -1,7 +1,22 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 import React, { Component } from "react";
-import Card from "components/Card/Card";
 import Chart from "react-apexcharts";
-import { barChartData, barChartOptions } from "variables/charts";
 
 class BarChart extends Component {
   constructor(props) {
@@ -14,28 +29,20 @@ class BarChart extends Component {
 
   componentDidMount() {
     this.setState({
-      chartData: barChartData,
-      chartOptions: barChartOptions,
+      chartData: this.props.chartData,
+      chartOptions: this.props.chartOptions,
     });
   }
 
   render() {
     return (
-      <Card
-        py="1rem"
-        height={{ sm: "200px" }}
+      <Chart
+        options={this.state.chartOptions}
+        series={this.state.chartData}
+        type="bar"
         width="100%"
-        bg="linear-gradient(81.62deg, #313860 2.25%, #151928 79.87%)"
-        position="relative"
-      >
-        <Chart
-          options={this.state.chartOptions}
-          series={this.state.chartData}
-          type="bar"
-          width="100%"
-          height="100%"
-        />
-      </Card>
+        height="100%"
+      />
     );
   }
 }

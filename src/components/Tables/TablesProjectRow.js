@@ -1,14 +1,31 @@
-import React from "react";
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 import {
-  Tr,
-  Td,
-  Flex,
-  Text,
-  Progress,
-  Icon,
   Button,
+  Flex,
+  Icon,
+  Progress,
+  Td,
+  Text,
+  Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
+import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
 
 function DashboardTableRow(props) {
@@ -16,7 +33,7 @@ function DashboardTableRow(props) {
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "250px" }} ps="0px">
         <Flex alignItems="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Icon as={logo} h={"24px"} w={"24px"} me="18px" />
           <Text

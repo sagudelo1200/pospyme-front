@@ -1,3 +1,20 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 import {
   Avatar,
   AvatarGroup,
@@ -16,7 +33,7 @@ function DashboardTableRow(props) {
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "250px" }} ps="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Icon as={logo} h={"24px"} w={"24px"} pe="5px" />
           <Text
@@ -32,12 +49,13 @@ function DashboardTableRow(props) {
 
       <Td>
         <AvatarGroup size="sm">
-          {members.map((member) => {
+          {members.map((member, index) => {
             return (
               <Avatar
                 name="Ryan Florence"
                 src={member}
                 _hover={{ zIndex: "3", cursor: "pointer" }}
+                key={index}
               />
             );
           })}

@@ -1,5 +1,23 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 // Assets
 import avatar1 from "assets/img/avatars/avatar1.png";
+import avatar10 from "assets/img/avatars/avatar10.png";
 import avatar2 from "assets/img/avatars/avatar2.png";
 import avatar3 from "assets/img/avatars/avatar3.png";
 import avatar4 from "assets/img/avatars/avatar4.png";
@@ -7,7 +25,6 @@ import avatar5 from "assets/img/avatars/avatar5.png";
 import avatar7 from "assets/img/avatars/avatar7.png";
 import avatar8 from "assets/img/avatars/avatar8.png";
 import avatar9 from "assets/img/avatars/avatar9.png";
-import avatar10 from "assets/img/avatars/avatar10.png";
 // Custom icons
 import {
   AdobexdLogo,
@@ -28,18 +45,6 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import { SiDropbox } from "react-icons/si";
-
-export const inventoryTableData = [
-  {
-    photo_url: 'https://picsum.photos/150',
-    name: 'Producto de prueba',
-    sku: '123456789',
-    price_sale: '$1,000.00',
-    price_buy: '$1,600.00',
-    quantity: '12',
-    status: 'Disponible',
-  },
-]
 
 export const dashboardTableData = [
   {
@@ -123,6 +128,177 @@ export const timelineData = [
     date: "18 DEC 4:41 PM",
   },
 ];
+
+export const timelineProjectsData = [
+  {
+    logo: FaBell,
+    title: "$2400, Design changes",
+    titleColor: "#fff",
+    date: "22 DEC 7:20 PM",
+    color: "teal.300",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "teal.300",
+        titleTag: "DESIGN",
+      },
+    ],
+  },
+  {
+    logo: FaHtml5,
+    title: "New order #4219423",
+    titleColor: "#fff",
+    date: "21 DEC 11:21 PM",
+    color: "orange",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "red.500",
+        titleTag: "ORDER",
+      },
+      {
+        bgTag: "red.500",
+        titleTag: "#1832412",
+      },
+    ],
+  },
+  {
+    logo: FaShoppingCart,
+    title: "Server Payments for April",
+    titleColor: "#fff",
+    date: "21 DEC 9:28 PM",
+    color: "blue.400",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "blue.400",
+        titleTag: "SERVER",
+      },
+      {
+        bgTag: "blue.400",
+        titleTag: "PAYMENTS",
+      },
+    ],
+  },
+  {
+    logo: FaCreditCard,
+    title: "New card added for order #3210145",
+    titleColor: "#fff",
+    date: "20 DEC 3:52 PM",
+    color: "orange.300",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "orange.300",
+        titleTag: "CARD",
+      },
+      {
+        bgTag: "orange.300",
+        titleTag: "#1832412",
+      },
+      {
+        bgTag: "orange.300",
+        titleTag: "PRIORITY",
+      },
+    ],
+  },
+  {
+    logo: SiDropbox,
+    title: "Unlock packages for Development",
+    titleColor: "#fff",
+    date: "19 DEC 11:35 PM",
+    color: "purple.400",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "purple.400",
+        titleTag: "DEVELOPMENT",
+      },
+    ],
+  },
+  {
+    logo: FaBell,
+    title: "$2400, Design changes",
+    titleColor: "#fff",
+    date: "22 DEC 7:20 PM",
+    color: "teal.300",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "teal.300",
+        titleTag: "DESIGN",
+      },
+    ],
+  },
+  {
+    logo: FaHtml5,
+    title: "New order #4219423",
+    titleColor: "#fff",
+    date: "21 DEC 11:21 PM",
+    color: "orange",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "red.500",
+        titleTag: "ORDER",
+      },
+      {
+        bgTag: "red.500",
+        titleTag: "#1832412",
+      },
+    ],
+  },
+  {
+    logo: FaShoppingCart,
+    title: "Server Payments for April",
+    titleColor: "#fff",
+    date: "21 DEC 9:28 PM",
+    color: "blue.400",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "blue.400",
+        titleTag: "SERVER",
+      },
+      {
+        bgTag: "blue.400",
+        titleTag: "PAYMENTS",
+      },
+    ],
+  },
+  {
+    logo: FaCreditCard,
+    title: "New card added for order #3210145",
+    titleColor: "#fff",
+    date: "20 DEC 3:52 PM",
+    color: "orange.300",
+    description:
+      "People care about how you see the world, how you think, what motivates you, what you’re struggling with or afraid of.",
+    tags: [
+      {
+        bgTag: "orange.300",
+        titleTag: "CARD",
+      },
+      {
+        bgTag: "orange.300",
+        titleTag: "#1832412",
+      },
+      {
+        bgTag: "orange.300",
+        titleTag: "PRIORITY",
+      },
+    ],
+  },
+];
+
 export const rtlDashboardTableData = [
   {
     logo: AdobexdLogo,
@@ -399,5 +575,104 @@ export const olderTransactions = [
     date: "25 March 2021, at 16:30 PM",
     price: "- $987",
     logo: FaArrowDown,
+  },
+];
+
+export const transactionsCRM = [
+  {
+    name: "Netflix",
+    date: "26 March 2021, at 13:45 PM",
+    price: "- $2500",
+    logo: FaArrowDown,
+  },
+  {
+    name: "Apple",
+    date: "26 March 2021, at 12:30 PM",
+    price: "+ $2500",
+    logo: FaArrowUp,
+  },
+  {
+    name: "Stripe",
+    date: "26 March 2021, at 05:00 PM",
+    price: "+ $9900",
+    logo: FaArrowUp,
+  },
+];
+
+export const revenueCRM = [
+  {
+    name: "via Paypal",
+    date: "27 March 2021, at 12:30 PM",
+    price: "+ $8700",
+    logo: FaArrowUp,
+  },
+  {
+    name: "Partner #01424",
+    date: "27 March 2021, at 12:30 PM",
+    price: "+ $12000",
+    logo: FaArrowUp,
+  },
+  {
+    name: "Services",
+    date: "26 March 2021, at 10:10 PM",
+    price: "- $1900",
+    logo: FaArrowDown,
+  },
+];
+
+export const tablesReportsData = [
+  {
+    image: avatar4,
+    domain: "Manager",
+    name: "Esthera Jackson",
+    review: "Positive",
+    email: "esthera@simmmple.com",
+    employed: "14/06/21",
+    id: 42312,
+  },
+  {
+    image: avatar1,
+    domain: "Programmer",
+    name: "Alexa Liras",
+    review: "Positive",
+    email: "alexa@simmmple.com",
+    employed: "14/06/21",
+    id: 93201,
+  },
+  {
+    image: avatar5,
+    domain: "Executive",
+    name: "Laurent Michael",
+    review: "Neutral",
+    email: "laurent@simmmple.com",
+    employed: "14/06/21",
+    id: 84120,
+  },
+  {
+    image: avatar4,
+    domain: "Manager",
+    name: "Freduardo Hill",
+    review: "Positive",
+    email: "freduardo@simmmple.com",
+    employed: "14/06/21",
+    id: 42314,
+  },
+  {
+    image: avatar7,
+    domain: "Programmer",
+    name: "Daniel Thomas",
+    review: "Negative",
+    email: "daniel@simmmple.com",
+    employed: "14/06/21",
+    id: 75642,
+  },
+  {
+    image: avatar8,
+    domain: "Designer",
+    name: "Mark Wilson",
+    review: "Positive",
+    email: "mark@simmmple.com",
+    employed: "14/06/21",
+    id: 78583,
   },
 ];

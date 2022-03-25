@@ -1,25 +1,47 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 // Chakra imports
 import { ChakraProvider, Portal, useDisclosure } from "@chakra-ui/react";
+import "assets/css/pud-dashboard-styles.css";
 import Configurator from "components/Configurator/Configurator";
+import FixedPlugin from "components/FixedPlugin/FixedPlugin";
 import Footer from "components/Footer/Footer.js";
+// Custom components
+import MainPanel from "components/Layout/MainPanel";
+import PanelContainer from "components/Layout/PanelContainer";
+import PanelContent from "components/Layout/PanelContent";
 // Layout components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
+import { SidebarContext } from "contexts/SidebarContext";
 import React, { useState } from "react";
+import "react-quill/dist/quill.snow.css"; // ES6
 import { Redirect, Route, Switch } from "react-router-dom";
 import routes from "routes.js";
 // Custom Chakra theme
 import theme from "theme/theme.js";
-import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
-// Custom components
-import MainPanel from "../components/Layout/MainPanel";
-import PanelContainer from "../components/Layout/PanelContainer";
-import PanelContent from "../components/Layout/PanelContent";
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
   const [sidebarVariant, setSidebarVariant] = useState("transparent");
   const [fixed, setFixed] = useState(false);
+  const [toggleSidebar, setToggleSidebar] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(275);
   // ref for main panel div
   const mainPanel = React.createRef();
   // functions for changing the states from components
@@ -27,15 +49,15 @@ export default function Dashboard(props) {
     return window.location.pathname !== "/admin/full-screen-maps";
   };
   const getActiveRoute = (routes) => {
-    let activeRoute = "Default Brand Text";
+    let activeRoute = "default";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
-        let collapseActiveRoute = getActiveRoute(routes[i].views);
+        let collapseActiveRoute = getActiveRoute(routes[i].items);
         if (collapseActiveRoute !== activeRoute) {
           return collapseActiveRoute;
         }
       } else if (routes[i].category) {
-        let categoryActiveRoute = getActiveRoute(routes[i].views);
+        let categoryActiveRoute = getActiveRoute(routes[i].items);
         if (categoryActiveRoute !== activeRoute) {
           return categoryActiveRoute;
         }
@@ -49,12 +71,16 @@ export default function Dashboard(props) {
     }
     return activeRoute;
   };
-  // This changes navbar state(fixed or not)
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
-      if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbar(routes[i].views);
+      if (routes[i].collapse) {
+        let collapseActiveNavbar = getActiveNavbar(routes[i].items);
+        if (collapseActiveNavbar !== activeNavbar) {
+          return collapseActiveNavbar;
+        }
+      } else if (routes[i].category) {
+        let categoryActiveNavbar = getActiveNavbar(routes[i].items);
         if (categoryActiveNavbar !== activeNavbar) {
           return categoryActiveNavbar;
         }
@@ -62,9 +88,7 @@ export default function Dashboard(props) {
         if (
           window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
         ) {
-          if (routes[i].secondaryNavbar) {
-            return routes[i].secondaryNavbar;
-          }
+          return routes[i].secondaryNavbar;
         }
       }
     }
@@ -72,12 +96,6 @@ export default function Dashboard(props) {
   };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.collapse) {
-        return getRoutes(prop.views);
-      }
-      if (prop.category === "account") {
-        return getRoutes(prop.views);
-      }
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -86,70 +104,84 @@ export default function Dashboard(props) {
             key={key}
           />
         );
+      }
+      if (prop.collapse) {
+        return getRoutes(prop.items);
+      }
+      if (prop.category) {
+        return getRoutes(prop.items);
       } else {
         return null;
       }
     });
   };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   document.documentElement.dir = "ltr";
+  document.documentElement.layout = "admin";
   // Chakra Color Mode
   return (
-    <ChakraProvider theme={theme} resetCss={false}>
-      <Sidebar
-        routes={routes}
-        logoText={"POSPyME"}
-        display="none"
-        sidebarVariant={sidebarVariant}
-        {...rest}
-      />
-      <MainPanel
-        ref={mainPanel}
-        w={{
-          base: "100%",
-          xl: "calc(100% - 275px)",
+    <ChakraProvider theme={theme} resetCss={false} overflow="scroll">
+      <SidebarContext.Provider
+        value={{
+          sidebarWidth,
+          setSidebarWidth,
+          toggleSidebar,
+          setToggleSidebar,
         }}
       >
-        <Portal>
-          <AdminNavbar
-            onOpen={onOpen}
-            logoText={"POSPyME"}
-            brandText={getActiveRoute(routes)}
-            secondary={getActiveNavbar(routes)}
-            fixed={fixed}
-            {...rest}
-          />
-        </Portal>
-        {getRoute() ? (
-          <PanelContent>
-            <PanelContainer>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/dashboard" />
-              </Switch>
-            </PanelContainer>
-          </PanelContent>
-        ) : null}
-        <Footer />
-        <Portal>
-          <FixedPlugin
-            secondary={getActiveNavbar(routes)}
-            fixed={fixed}
-            onOpen={onOpen}
-          />
-        </Portal>
-        <Configurator
-          secondary={getActiveNavbar(routes)}
-          isOpen={isOpen}
-          onClose={onClose}
-          isChecked={fixed}
-          onSwitch={(value) => {
-            setFixed(value);
-          }}
-          onOpaque={() => setSidebarVariant("opaque")}
-          onTransparent={() => setSidebarVariant("transparent")}
+        <Sidebar
+          routes={routes}
+          logoText={"Software Administrativo"}
+          display="none"
+          sidebarVariant={sidebarVariant}
+          {...rest}
         />
-      </MainPanel>
+        <MainPanel
+          ref={mainPanel}
+          w={{
+            base: "100%",
+            xl: `calc(100% - ${sidebarWidth}px)`,
+          }}
+        >
+          <Portal>
+            <AdminNavbar
+              onOpen={onOpen}
+              logoText={"POS"}
+              brandText={getActiveRoute(routes)}
+              secondary={getActiveNavbar(routes)}
+              fixed={fixed}
+              {...rest}
+            />
+          </Portal>
+
+          {getRoute() ? (
+            <PanelContent>
+              <PanelContainer>
+                <Switch>
+                  {getRoutes(routes)}
+                  <Redirect from="/admin" to="/admin/dashboard/default" />
+                </Switch>
+              </PanelContainer>
+            </PanelContent>
+          ) : null}
+          <Footer />
+          <Portal>
+            <FixedPlugin fixed={fixed} onOpen={onOpen} />
+          </Portal>
+          <Configurator
+            secondary={getActiveNavbar(routes)}
+            isOpen={isOpen}
+            onClose={onClose}
+            isChecked={fixed}
+            onSwitch={(value) => {
+              setFixed(value);
+            }}
+            onOpaque={() => setSidebarVariant("opaque")}
+            onTransparent={() => setSidebarVariant("transparent")}
+          />
+        </MainPanel>
+      </SidebarContext.Provider>
     </ChakraProvider>
   );
 }

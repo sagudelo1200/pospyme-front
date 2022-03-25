@@ -1,7 +1,29 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 /*eslint-disable*/
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, QuestionIcon } from "@chakra-ui/icons";
 // chakra imports
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Drawer,
@@ -10,17 +32,33 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
+  HStack,
+  Icon,
   Link,
+  List,
+  ListItem,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import SidebarHelpImage from "assets/img/SidebarHelpImage.png";
 import IconBox from "components/Icons/IconBox";
-import { CashIcon } from "components/Icons/Icons";
-import { Separator } from "components/Separator/Separator";
+import { CreativeTimLogo } from "components/Icons/Icons";
+import {
+  renderThumbDark,
+  renderThumbLight,
+  renderTrack,
+  renderTrackRTL,
+  renderView,
+  renderViewRTL,
+} from "components/Scrollbar/Scrollbar";
+import { HSeparator } from "components/Separator/Separator";
+import { SidebarContext } from "contexts/SidebarContext";
 import PropTypes from "prop-types";
 import React from "react";
+import { Scrollbars } from "react-custom-scrollbars";
+import { FaCircle } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
 
 // FUNCTIONS
@@ -29,178 +67,343 @@ function Sidebar(props) {
   // to check for active links and opened collapses
   let location = useLocation();
   // this is for the rest of the collapses
-  const [state, setState] = React.useState({});
+  const { sidebarWidth, setSidebarWidth, toggleSidebar } = React.useContext(
+    SidebarContext
+  );
   const mainPanel = React.useRef();
   let variantChange = "0.2s linear";
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
-    return location.pathname === routeName ? "active" : "";
+    return location.pathname.includes(routeName);
   };
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
     const { sidebarVariant } = props;
     // Chakra Color Mode
-    let activeBg = useColorModeValue("white", "gray.700");
+    let activeBg = useColorModeValue("teal.300", "teal.300");
+    let activeAccordionBg = useColorModeValue("white", "gray.700");
     let inactiveBg = useColorModeValue("white", "gray.700");
+    let inactiveColorIcon = useColorModeValue("teal.300", "teal.300");
+    let activeColorIcon = useColorModeValue("white", "white");
     let activeColor = useColorModeValue("gray.700", "white");
     let inactiveColor = useColorModeValue("gray.400", "gray.400");
     let sidebarActiveShadow = "0px 7px 11px rgba(0, 0, 0, 0.04)";
     // Here are all the props that may change depending on sidebar's state.(Opaque or transparent)
     if (sidebarVariant === "opaque") {
-      activeBg = "transparent";
+      activeBg = useColorModeValue("teal.300", "teal.300");
       inactiveBg = useColorModeValue("gray.100", "gray.600");
       activeColor = useColorModeValue("gray.700", "white");
       inactiveColor = useColorModeValue("gray.400", "gray.400");
       sidebarActiveShadow = "none";
     }
-
-    return routes.map((prop, key) => {
-      if (prop.redirect) {
-        return null;
-      }
+    return routes.map((prop, index) => {
       if (prop.category) {
-        var st = {};
-        st[prop["state"]] = !state[prop.state];
         return (
           <>
             <Text
+              fontSize={sidebarWidth === 275 ? "md" : "xs"}
               color={activeColor}
-              fontWeight="bold"
-              mb={{
-                xl: "12px",
-              }}
-              mx="auto"
+              fontWeight='bold'
+              mx='auto'
               ps={{
                 sm: "10px",
                 xl: "16px",
               }}
-              py="12px"
-            >
-              {document.documentElement.dir === "rtl"
-                ? prop.rtlName
-                : prop.name}
+              py='12px'
+              key={index}>
+              {prop.name}
             </Text>
-            {createLinks(prop.views)}
+            {createLinks(prop.items)}
           </>
         );
       }
+      if (prop.collapse) {
+        return (
+          <Accordion allowToggle>
+            <AccordionItem border='none'>
+              <AccordionButton
+                display='flex'
+                align='center'
+                justify='center'
+                boxShadow={
+                  activeRoute(prop.path) && prop.icon
+                    ? sidebarActiveShadow
+                    : null
+                }
+                _hover={{
+                  boxShadow:
+                    activeRoute(prop.path) && prop.icon
+                      ? sidebarActiveShadow
+                      : null,
+                }}
+                _focus={{
+                  boxShadow: "none",
+                }}
+                borderRadius='15px'
+                w={sidebarWidth === 275 ? "100%" : "77%"}
+                px={prop.icon ? null : "0px"}
+                py={prop.icon ? "12px" : null}
+                bg={
+                  activeRoute(prop.path) && prop.icon
+                    ? activeAccordionBg
+                    : "transparent"
+                }>
+                {activeRoute(prop.path) ? (
+                  <Button
+                    boxSize='initial'
+                    justifyContent='flex-start'
+                    alignItems='center'
+                    bg='transparent'
+                    transition={variantChange}
+                    mx={{
+                      xl: "auto",
+                    }}
+                    px='0px'
+                    borderRadius='15px'
+                    w='100%'
+                    _hover='none'
+                    _active={{
+                      bg: "inherit",
+                      transform: "none",
+                      borderColor: "transparent",
+                      border: "none",
+                    }}
+                    _focus={{
+                      transform: "none",
+                      borderColor: "transparent",
+                      border: "none",
+                    }}>
+                    {prop.icon ? (
+                      <Flex>
+                        <IconBox
+                          bg={activeBg}
+                          color={activeColorIcon}
+                          h='30px'
+                          w='30px'
+                          me='12px'
+                          transition={variantChange}>
+                          {prop.icon}
+                        </IconBox>
+                        <Text
+                          color={activeColor}
+                          my='auto'
+                          fontSize='sm'
+                          display={sidebarWidth === 275 ? "block" : "none"}>
+                          {prop.name}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <HStack
+                        spacing={sidebarWidth === 275 ? "22px" : "0px"}
+                        ps={sidebarWidth === 275 ? "10px" : "0px"}
+                        ms={sidebarWidth === 275 ? "0px" : "8px"}>
+                        <Icon
+                          as={FaCircle}
+                          w='10px'
+                          color='teal.300'
+                          display={sidebarWidth === 275 ? "block" : "none"}
+                        />
+                        <Text color={activeColor} my='auto' fontSize='sm'>
+                          {sidebarWidth === 275 ? prop.name : prop.name[0]}
+                        </Text>
+                      </HStack>
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    boxSize='initial'
+                    justifyContent='flex-start'
+                    alignItems='center'
+                    bg='transparent'
+                    mx={{
+                      xl: "auto",
+                    }}
+                    px='0px'
+                    borderRadius='15px'
+                    w='100%'
+                    _hover='none'
+                    _active={{
+                      bg: "inherit",
+                      transform: "none",
+                      borderColor: "transparent",
+                    }}
+                    _focus={{
+                      borderColor: "transparent",
+                      boxShadow: "none",
+                    }}>
+                    {prop.icon ? (
+                      <Flex>
+                        <IconBox
+                          bg={inactiveBg}
+                          color={inactiveColorIcon}
+                          h='30px'
+                          w='30px'
+                          me='12px'
+                          transition={variantChange}
+                          boxShadow={sidebarActiveShadow}
+                          _hover={{ boxShadow: sidebarActiveShadow }}>
+                          {prop.icon}
+                        </IconBox>
+                        <Text
+                          color={inactiveColor}
+                          my='auto'
+                          fontSize='sm'
+                          display={sidebarWidth === 275 ? "block" : "none"}>
+                          {prop.name}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <HStack
+                        spacing={sidebarWidth === 275 ? "26px" : "0px"}
+                        ps={sidebarWidth === 275 ? "10px" : "0px"}
+                        ms={sidebarWidth === 275 ? "0px" : "8px"}>
+                        <Icon
+                          as={FaCircle}
+                          w='6px'
+                          color='teal.300'
+                          display={sidebarWidth === 275 ? "block" : "none"}
+                        />
+                        <Text
+                          color={inactiveColor}
+                          my='auto'
+                          fontSize='md'
+                          fontWeight='normal'>
+                          {sidebarWidth === 275 ? prop.name : prop.name[0]}
+                        </Text>
+                      </HStack>
+                    )}
+                  </Button>
+                )}
+                <AccordionIcon
+                  color='gray.400'
+                  display={
+                    prop.icon
+                      ? sidebarWidth === 275
+                        ? "block"
+                        : "none"
+                      : "block"
+                  }
+                  transform={
+                    prop.icon
+                      ? null
+                      : sidebarWidth === 275
+                        ? null
+                        : "translateX(-70%)"
+                  }
+                />
+              </AccordionButton>
+              <AccordionPanel
+                pe={prop.icon ? null : "0px"}
+                pb='8px'
+                ps={prop.icon ? null : sidebarWidth === 275 ? null : "8px"}>
+                <List>
+                  {
+                    prop.icon
+                      ? createLinks(prop.items) // for bullet accordion links
+                      : createAccordionLinks(prop.items) // for non-bullet accordion links
+                  }
+                </List>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        );
+      } else {
+        return (
+          <NavLink to={prop.layout + prop.path}>
+            {prop.icon ? (
+              <Box>
+                <HStack spacing='14px' py='15px' px='15px'>
+                  <IconBox
+                    bg='teal.300'
+                    color='white'
+                    h='30px'
+                    w='30px'
+                    transition={variantChange}>
+                    {prop.icon}
+                  </IconBox>
+                  <Text
+                    color={
+                      activeRoute(prop.path.toLowerCase())
+                        ? activeColor
+                        : inactiveColor
+                    }
+                    fontWeight={activeRoute(prop.name) ? "bold" : "normal"}
+                    fontSize='sm'>
+                    {prop.name}
+                  </Text>
+                </HStack>
+              </Box>
+            ) : (
+              <ListItem>
+                <HStack
+                  spacing={
+                    sidebarWidth === 275
+                      ? activeRoute(prop.path.toLowerCase())
+                        ? "22px"
+                        : "26px"
+                      : "8px"
+                  }
+                  py='5px'
+                  px={sidebarWidth === 275 ? "10px" : "0px"}>
+                  <Icon
+                    as={FaCircle}
+                    w={activeRoute(prop.path.toLowerCase()) ? "10px" : "6px"}
+                    color='teal.300'
+                    display={sidebarWidth === 275 ? "block" : "none"}
+                  />
+                  <Text
+                    color={
+                      activeRoute(prop.path.toLowerCase())
+                        ? activeColor
+                        : inactiveColor
+                    }
+                    fontWeight={
+                      activeRoute(prop.path.toLowerCase()) ? "bold" : "normal"
+                    }>
+                    {sidebarWidth === 275 ? prop.name : prop.name[0]}
+                  </Text>
+                </HStack>
+              </ListItem>
+            )}
+          </NavLink>
+        );
+      }
+    });
+  };
+
+  const createAccordionLinks = (routes) => {
+    let inactiveColor = useColorModeValue("gray.400", "gray.400");
+    let activeColor = useColorModeValue("gray.700", "white");
+    return routes.map((prop, index) => {
       return (
         <NavLink to={prop.layout + prop.path}>
-          {activeRoute(prop.layout + prop.path) === "active" ? (
-            <Button
-              boxSize="initial"
-              justifyContent="flex-start"
-              alignItems="center"
-              boxShadow={sidebarActiveShadow}
-              bg={activeBg}
-              transition={variantChange}
-              mb={{
-                xl: "12px",
-              }}
-              mx={{
-                xl: "auto",
-              }}
-              ps={{
-                sm: "10px",
-                xl: "16px",
-              }}
-              py="12px"
-              borderRadius="15px"
-              _hover="none"
-              w="100%"
-              _active={{
-                bg: "inherit",
-                transform: "none",
-                borderColor: "transparent",
-              }}
-              _focus={{
-                boxShadow: "0px 7px 11px rgba(0, 0, 0, 0.04)",
-              }}
-            >
-              <Flex>
-                {typeof prop.icon === "string" ? (
-                  <Icon>{prop.icon}</Icon>
-                ) : (
-                  <IconBox
-                    bg="teal.300"
-                    color="white"
-                    h="30px"
-                    w="30px"
-                    me="12px"
-                    transition={variantChange}
-                  >
-                    {prop.icon}
-                  </IconBox>
-                )}
-                <Text color={activeColor} my="auto" fontSize="sm">
-                  {document.documentElement.dir === "rtl"
-                    ? prop.rtlName
-                    : prop.name}
-                </Text>
-              </Flex>
-            </Button>
-          ) : (
-            <Button
-              boxSize="initial"
-              justifyContent="flex-start"
-              alignItems="center"
-              bg="transparent"
-              mb={{
-                xl: "12px",
-              }}
-              mx={{
-                xl: "auto",
-              }}
-              py="12px"
-              ps={{
-                sm: "10px",
-                xl: "16px",
-              }}
-              borderRadius="15px"
-              _hover="none"
-              w="100%"
-              _active={{
-                bg: "inherit",
-                transform: "none",
-                borderColor: "transparent",
-              }}
-              _focus={{
-                boxShadow: "none",
-              }}
-            >
-              <Flex>
-                {typeof prop.icon === "string" ? (
-                  <Icon>{prop.icon}</Icon>
-                ) : (
-                  <IconBox
-                    bg={inactiveBg}
-                    color="teal.300"
-                    h="30px"
-                    w="30px"
-                    me="12px"
-                    transition={variantChange}
-                  >
-                    {prop.icon}
-                  </IconBox>
-                )}
-                <Text color={inactiveColor} my="auto" fontSize="sm">
-                  {document.documentElement.dir === "rtl"
-                    ? prop.rtlName
-                    : prop.name}
-                </Text>
-              </Flex>
-            </Button>
-          )}
+          <ListItem
+            pt='5px'
+            ms={sidebarWidth === 275 ? "26px" : "0px"}
+            key={index}>
+            <Text
+              mb='4px'
+              color={
+                activeRoute(prop.path.toLowerCase())
+                  ? activeColor
+                  : inactiveColor
+              }
+              fontWeight={
+                activeRoute(prop.path.toLowerCase()) ? "bold" : "normal"
+              }
+              fontSize='sm'>
+              {sidebarWidth === 275 ? prop.name : prop.name[0]}
+            </Text>
+          </ListItem>
         </NavLink>
       );
     });
   };
   const { logoText, routes, sidebarVariant } = props;
-
-  var links = <>{createLinks(routes)}</>;
+  let isWindows = navigator.platform.startsWith("Win");
+  let links = <>{createLinks(routes)}</>;
   //  BRAND
   //  Chakra Color Mode
-  const mainText = useColorModeValue("gray.700", "gray.200");
   let sidebarBg = "none";
   let sidebarRadius = "0px";
   let sidebarMargins = "0px";
@@ -209,53 +412,160 @@ function Sidebar(props) {
     sidebarRadius = "16px";
     sidebarMargins = "16px 0px 16px 16px";
   }
-  var brand = (
-    <Box pt={"25px"} mb="12px">
+  let brand = (
+    <Box pt={"25px"} mb='12px'>
       <Link
-        href={`${process.env.PUBLIC_URL}/`}
-        target="_blank"
-        display="flex"
-        lineHeight="100%"
-        mb="30px"
-        fontWeight="bold"
-        justifyContent="center"
-        alignItems="center"
-        fontSize="11px"
-      >
-        <CashIcon w="32px" h="32px" me="10px" />
-        <Text fontSize="sm" mt="3px">
+        href={`${process.env.PUBLIC_URL}/#/`}
+        target='_blank'
+        display='flex'
+        lineHeight='100%'
+        mb='30px'
+        fontWeight='bold'
+        justifyContent='center'
+        alignItems='center'
+        fontSize='11px'>
+        {/* insertar svg desde src/assets/svg/INVENTORY/boxes.svg */}
+        {/* DON'T USE <Box> tag */}
+        {/* throwIfNamespace: false */}
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          className='feather feather-box'
+        >
+          <path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'></path>
+          <polyline points='3.27 6.96 12 12.01 20.73 6.96'></polyline>
+        </svg>
+        <Text
+          fontSize='xs'
+          mt='3px'
+          display={sidebarWidth === 275 ? "block" : "none"}>
           {logoText}
         </Text>
       </Link>
-      <Separator></Separator>
+      <HSeparator />
+    </Box>
+  );
+
+  let sidebarContent = (
+    <Box>
+      <Box mb='20px'>{brand}</Box>
+      <Stack direction='column' mb='40px'>
+        <Box>{links}</Box>
+      </Stack>
+      {/* <Flex
+        borderRadius='15px'
+        flexDirection='column'
+        bgImage={SidebarHelpImage}
+        justifyContent='flex-start'
+        alignItems='start'
+        boxSize='border-box'
+        p={sidebarWidth === 275 ? "16px" : "12px"}
+        h={sidebarWidth === 275 ? "170px" : "auto"}
+        w={sidebarWidth === 275 ? "100%" : "77%"}>
+        <IconBox width='35px' h='35px' bg='white' mb='auto'>
+          <QuestionIcon color='teal.300' h='18px' w='18px' />
+        </IconBox>
+        <Text
+          fontSize='sm'
+          color='white'
+          fontWeight='bold'
+          display={sidebarWidth === 275 ? "block" : "none"}>
+          Need help?
+        </Text>
+        <Text
+          fontSize='xs'
+          color='white'
+          mb='10px'
+          display={sidebarWidth === 275 ? "block" : "none"}>
+          Please check our docs
+        </Text>
+        <Link
+          w='100%'
+          href='https://demos.creative-tim.com/docs-purity-ui-dashboard/'>
+          <Button
+            fontSize='10px'
+            fontWeight='bold'
+            w='100%'
+            bg='white'
+            _hover='none'
+            _active={{
+              bg: "white",
+              transform: "none",
+              borderColor: "transparent",
+            }}
+            _focus={{
+              boxShadow: "none",
+            }}
+            color='black'
+            display={sidebarWidth === 275 ? "block" : "none"}>
+            DOCUMENTATION
+          </Button>
+        </Link>
+      </Flex> */}
     </Box>
   );
 
   // SIDEBAR
   return (
-    <Box ref={mainPanel}>
-      <Box display={{ sm: "none", xl: "block" }} position="fixed">
+    <Box
+      ref={mainPanel}
+      onMouseEnter={
+        toggleSidebar
+          ? () => setSidebarWidth(sidebarWidth === 120 ? 275 : 120)
+          : null
+      }
+      onMouseLeave={
+        toggleSidebar
+          ? () => setSidebarWidth(sidebarWidth === 275 ? 120 : 275)
+          : null
+      }>
+      <Box display={{ sm: "none", xl: "block" }} position='fixed'>
         <Box
           bg={sidebarBg}
           transition={variantChange}
-          w="260px"
-          maxW="260px"
+          w={`${sidebarWidth}px`}
           ms={{
             sm: "16px",
           }}
           my={{
             sm: "16px",
           }}
-          h="calc(100vh - 32px)"
-          ps="20px"
-          pe="20px"
+          h='calc(100vh - 32px)'
+          ps='20px'
+          pe='20px'
           m={sidebarMargins}
-          borderRadius={sidebarRadius}
-        >
-          <Box>{brand}</Box>
-          <Stack direction="column" mb="40px">
-            <Box>{links}</Box>
-          </Stack>
+          borderRadius={sidebarRadius}>
+          {isWindows ? (
+            <Scrollbars
+              autoHide
+              renderTrackVertical={
+                document.documentElement.dir === "rtl"
+                  ? renderTrackRTL
+                  : renderTrack
+              }
+              renderThumbVertical={useColorModeValue(
+                renderThumbLight,
+                renderThumbDark
+              )}
+              renderView={
+                document.documentElement.dir === "rtl"
+                  ? renderViewRTL
+                  : renderView
+              }>
+              {sidebarContent}
+            </Scrollbars>
+          ) : (
+            <Box id='sidebarScrollRemove' overflowY='scroll' height='100vh'>
+              {sidebarContent}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
@@ -268,186 +578,287 @@ export function SidebarResponsive(props) {
   // to check for active links and opened collapses
   let location = useLocation();
   // this is for the rest of the collapses
-  const [state, setState] = React.useState({});
   const mainPanel = React.useRef();
+  let variantChange = "0.2s linear";
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
-    return location.pathname === routeName ? "active" : "";
+    return location.pathname.includes(routeName);
   };
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
+    const { sidebarVariant } = props;
     // Chakra Color Mode
-    const activeBg = useColorModeValue("white", "gray.700");
-    const inactiveBg = useColorModeValue("white", "gray.700");
-    const activeColor = useColorModeValue("gray.700", "white");
-    const inactiveColor = useColorModeValue("gray.400", "gray.400");
-
-    return routes.map((prop, key) => {
-      if (prop.redirect) {
-        return null;
-      }
+    let activeBg = useColorModeValue("teal.300", "teal.300");
+    let activeAccordionBg = useColorModeValue("white", "gray.700");
+    let inactiveBg = useColorModeValue("white", "gray.700");
+    let inactiveColorIcon = useColorModeValue("teal.300", "teal.300");
+    let activeColorIcon = useColorModeValue("white", "white");
+    let activeColor = useColorModeValue("gray.700", "white");
+    let inactiveColor = useColorModeValue("gray.400", "gray.400");
+    // Here are all the props that may change depending on sidebar's state.(Opaque or transparent)
+    if (sidebarVariant === "opaque") {
+      inactiveBg = useColorModeValue("gray.100", "gray.600");
+      activeColor = useColorModeValue("gray.700", "white");
+      inactiveColor = useColorModeValue("gray.400", "gray.400");
+    }
+    return routes.map((prop, index) => {
       if (prop.category) {
-        var st = {};
-        st[prop["state"]] = !state[prop.state];
         return (
           <>
             <Text
+              fontSize={"md"}
               color={activeColor}
-              fontWeight="bold"
-              mb={{
-                xl: "12px",
-              }}
-              mx="auto"
+              fontWeight='bold'
+              mx='auto'
               ps={{
                 sm: "10px",
                 xl: "16px",
               }}
-              py="12px"
-            >
-              {document.documentElement.dir === "rtl"
-                ? prop.rtlName
-                : prop.name}
+              py='12px'
+              key={index}>
+              {prop.name}
             </Text>
-            {createLinks(prop.views)}
+            {createLinks(prop.items)}
           </>
         );
       }
+      if (prop.collapse) {
+        return (
+          <Accordion allowToggle>
+            <AccordionItem border='none'>
+              <AccordionButton
+                display='flex'
+                align='center'
+                justify='center'
+                key={index}
+                borderRadius='15px'
+                _focus={{ boxShadow: "none" }}
+                _hover={{ boxShadow: "none" }}
+                px={prop.icon ? null : "0px"}
+                py={prop.icon ? "12px" : null}
+                bg={
+                  activeRoute(prop.path) && prop.icon
+                    ? activeAccordionBg
+                    : "transparent"
+                }>
+                {activeRoute(prop.path) ? (
+                  <Box
+                    as='button'
+                    boxSize='initial'
+                    justifyContent='flex-start'
+                    alignItems='center'
+                    bg='transparent'
+                    transition={variantChange}
+                    mx={{
+                      xl: "auto",
+                    }}
+                    px='0px'
+                    borderRadius='15px'
+                    _hover='none'
+                    w='100%'
+                    _active={{
+                      bg: "inherit",
+                      transform: "none",
+                      borderColor: "transparent",
+                    }}>
+                    {prop.icon ? (
+                      <Flex>
+                        <IconBox
+                          bg={activeBg}
+                          color={activeColorIcon}
+                          h='30px'
+                          w='30px'
+                          me='12px'
+                          transition={variantChange}>
+                          {prop.icon}
+                        </IconBox>
+                        <Text
+                          color={activeColor}
+                          my='auto'
+                          fontSize='sm'
+                          display={"block"}>
+                          {prop.name}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <HStack spacing={"22px"} ps='10px' ms='0px'>
+                        <Icon as={FaCircle} w='10px' color='teal.300' />
+                        <Text color={activeColor} my='auto' fontSize='sm'>
+                          {prop.name}
+                        </Text>
+                      </HStack>
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    as='button'
+                    boxSize='initial'
+                    justifyContent='flex-start'
+                    alignItems='center'
+                    bg='transparent'
+                    mx={{
+                      xl: "auto",
+                    }}
+                    px='0px'
+                    borderRadius='15px'
+                    _hover='none'
+                    w='100%'
+                    _active={{
+                      bg: "inherit",
+                      transform: "none",
+                      borderColor: "transparent",
+                    }}
+                    _focus={{
+                      boxShadow: "none",
+                    }}>
+                    {prop.icon ? (
+                      <Flex>
+                        <IconBox
+                          bg={inactiveBg}
+                          color={inactiveColorIcon}
+                          h='30px'
+                          w='30px'
+                          me='12px'
+                          transition={variantChange}>
+                          {prop.icon}
+                        </IconBox>
+                        <Text color={inactiveColor} my='auto' fontSize='sm'>
+                          {prop.name}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <HStack spacing={"26px"} ps={"10px"} ms={"0px"}>
+                        <Icon as={FaCircle} w='6px' color='teal.300' />
+                        <Text
+                          color={inactiveColor}
+                          my='auto'
+                          fontSize='md'
+                          fontWeight='normal'>
+                          {prop.name}
+                        </Text>
+                      </HStack>
+                    )}
+                  </Box>
+                )}
+                <AccordionIcon color='gray.400' />
+              </AccordionButton>
+              <AccordionPanel pe={prop.icon ? null : "0px"} pb='8px'>
+                <List>
+                  {
+                    prop.icon
+                      ? createLinks(prop.items) // for bullet accordion links
+                      : createAccordionLinks(prop.items) // for non-bullet accordion links
+                  }
+                </List>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        );
+      } else {
+        return (
+          <NavLink to={prop.layout + prop.path}>
+            {prop.icon ? (
+              <Box>
+                <HStack spacing='14px' py='15px' px='15px'>
+                  <IconBox
+                    bg='teal.300'
+                    color='white'
+                    h='30px'
+                    w='30px'
+                    transition={variantChange}>
+                    {prop.icon}
+                  </IconBox>
+                  <Text
+                    color={
+                      activeRoute(prop.path.toLowerCase())
+                        ? activeColor
+                        : inactiveColor
+                    }
+                    fontWeight={activeRoute(prop.name) ? "bold" : "normal"}
+                    fontSize='sm'>
+                    {prop.name}
+                  </Text>
+                </HStack>
+              </Box>
+            ) : (
+              <ListItem>
+                <HStack spacing='22px' py='5px' px='10px'>
+                  <Icon
+                    as={FaCircle}
+                    w={activeRoute(prop.path.toLowerCase()) ? "10px" : "6px"}
+                    color='teal.300'
+                  />
+                  <Text
+                    color={
+                      activeRoute(prop.path.toLowerCase())
+                        ? activeColor
+                        : inactiveColor
+                    }
+                    fontWeight={
+                      activeRoute(prop.path.toLowerCase()) ? "bold" : "normal"
+                    }>
+                    {prop.name}
+                  </Text>
+                </HStack>
+              </ListItem>
+            )}
+          </NavLink>
+        );
+      }
+    });
+  };
+
+  const createAccordionLinks = (routes) => {
+    let inactiveColor = useColorModeValue("gray.400", "gray.400");
+    let activeColor = useColorModeValue("gray.700", "white");
+    return routes.map((prop, index) => {
       return (
         <NavLink to={prop.layout + prop.path}>
-          {activeRoute(prop.layout + prop.path) === "active" ? (
-            <Button
-              boxSize="initial"
-              justifyContent="flex-start"
-              alignItems="center"
-              bg={activeBg}
-              mb={{
-                xl: "12px",
-              }}
-              mx={{
-                xl: "auto",
-              }}
-              ps={{
-                sm: "10px",
-                xl: "16px",
-              }}
-              py="12px"
-              borderRadius="15px"
-              _hover="none"
-              w="100%"
-              _active={{
-                bg: "inherit",
-                transform: "none",
-                borderColor: "transparent",
-              }}
-              _focus={{
-                boxShadow: "none",
-              }}
-            >
-              <Flex>
-                {typeof prop.icon === "string" ? (
-                  <Icon>{prop.icon}</Icon>
-                ) : (
-                  <IconBox
-                    bg="teal.300"
-                    color="white"
-                    h="30px"
-                    w="30px"
-                    me="12px"
-                  >
-                    {prop.icon}
-                  </IconBox>
-                )}
-                <Text color={activeColor} my="auto" fontSize="sm">
-                  {document.documentElement.dir === "rtl"
-                    ? prop.rtlName
-                    : prop.name}
-                </Text>
-              </Flex>
-            </Button>
-          ) : (
-            <Button
-              boxSize="initial"
-              justifyContent="flex-start"
-              alignItems="center"
-              bg="transparent"
-              mb={{
-                xl: "12px",
-              }}
-              mx={{
-                xl: "auto",
-              }}
-              py="12px"
-              ps={{
-                sm: "10px",
-                xl: "16px",
-              }}
-              borderRadius="15px"
-              _hover="none"
-              w="100%"
-              _active={{
-                bg: "inherit",
-                transform: "none",
-                borderColor: "transparent",
-              }}
-              _focus={{
-                boxShadow: "none",
-              }}
-            >
-              <Flex>
-                {typeof prop.icon === "string" ? (
-                  <Icon>{prop.icon}</Icon>
-                ) : (
-                  <IconBox
-                    bg={inactiveBg}
-                    color="teal.300"
-                    h="30px"
-                    w="30px"
-                    me="12px"
-                  >
-                    {prop.icon}
-                  </IconBox>
-                )}
-                <Text color={inactiveColor} my="auto" fontSize="sm">
-                  {document.documentElement.dir === "rtl"
-                    ? prop.rtlName
-                    : prop.name}
-                </Text>
-              </Flex>
-            </Button>
-          )}
+          <ListItem pt='5px' ms='26px' key={index}>
+            <Text
+              color={
+                activeRoute(prop.path.toLowerCase())
+                  ? activeColor
+                  : inactiveColor
+              }
+              fontWeight={
+                activeRoute(prop.path.toLowerCase()) ? "bold" : "normal"
+              }
+              fontSize='sm'>
+              {prop.name}
+            </Text>
+          </ListItem>
         </NavLink>
       );
     });
   };
-  const { logoText, routes, ...rest } = props;
+  const { logoText, routes } = props;
 
   var links = <>{createLinks(routes)}</>;
   //  BRAND
   //  Chakra Color Mode
-  const mainText = useColorModeValue("gray.700", "gray.200");
   let hamburgerColor = useColorModeValue("gray.500", "gray.200");
   if (props.secondary === true) {
     hamburgerColor = "white";
   }
   var brand = (
-    <Box pt={"35px"} mb="8px">
+    <Box pt={"35px"} mb='8px'>
       <Link
-        href={`${process.env.PUBLIC_URL}/`}
-        target="_blank"
-        display="flex"
-        lineHeight="100%"
-        mb="30px"
-        fontWeight="bold"
-        justifyContent="center"
-        alignItems="center"
-        fontSize="11px"
-      >
-        <CashIcon w="32px" h="32px" me="10px" />
-        <Text fontSize="sm" mt="3px">
+        href={`${process.env.PUBLIC_URL}/#/`}
+        target='_blank'
+        display='flex'
+        lineHeight='100%'
+        mb='30px'
+        fontWeight='bold'
+        justifyContent='center'
+        alignItems='center'
+        fontSize='11px'>
+        <CreativeTimLogo w='32px' h='32px' me='10px' />
+        <Text fontSize='xs' mt='3px'>
           {logoText}
         </Text>
       </Link>
-      <Separator></Separator>
+      <HSeparator />
     </Box>
   );
 
@@ -456,52 +867,100 @@ export function SidebarResponsive(props) {
   const btnRef = React.useRef();
   // Color variables
   return (
-    <Flex
-      display={{ sm: "flex", xl: "none" }}
-      ref={mainPanel}
-      alignItems="center"
-    >
-      <HamburgerIcon
-        color={hamburgerColor}
-        w="18px"
-        h="18px"
-        ref={btnRef}
-        colorScheme="teal"
-        onClick={onOpen}
-      />
-      <Drawer
-        isOpen={isOpen}
-        onClose={onClose}
-        placement={document.documentElement.dir === "rtl" ? "right" : "left"}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent
-          w="250px"
-          maxW="250px"
-          ms={{
-            sm: "16px",
-          }}
-          my={{
-            sm: "16px",
-          }}
-          borderRadius="16px"
-        >
-          <DrawerCloseButton
-            _focus={{ boxShadow: "none" }}
-            _hover={{ boxShadow: "none" }}
+    <Box ref={mainPanel} display={props.display}>
+      <Box display={{ sm: "block", xl: "none" }}>
+        <>
+          <HamburgerIcon
+            color={hamburgerColor}
+            w='18px'
+            h='18px'
+            me='16px'
+            ref={btnRef}
+            colorScheme='teal'
+            cursor='pointer'
+            onClick={onOpen}
           />
-          <DrawerBody maxW="250px" px="1rem">
-            <Box maxW="100%" h="100vh">
-              <Box>{brand}</Box>
-              <Stack direction="column" mb="40px">
-                <Box>{links}</Box>
-              </Stack>
-            </Box>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </Flex>
+          <Drawer
+            placement={
+              document.documentElement.dir === "rtl" ? "right" : "left"
+            }
+            isOpen={isOpen}
+            onClose={onClose}
+            finalFocusRef={btnRef}>
+            <DrawerOverlay />
+            <DrawerContent
+              w='250px'
+              maxW='250px'
+              ms={{
+                sm: "16px",
+              }}
+              my={{
+                sm: "16px",
+              }}
+              borderRadius='16px'>
+              <DrawerCloseButton
+                _focus={{ boxShadow: "none" }}
+                _hover={{ boxShadow: "none" }}
+              />
+              <DrawerBody maxW='250px' px='1rem'>
+                <Box maxW='100%' h='100vh'>
+                  <Box mb='20px'>{brand}</Box>
+                  <Stack direction='column' mb='40px'>
+                    <Box>{links}</Box>
+                  </Stack>
+                  <Flex
+                    borderRadius='15px'
+                    flexDirection='column'
+                    bgImage={SidebarHelpImage}
+                    justifyContent='flex-start'
+                    alignItems='start'
+                    boxSize='border-box'
+                    p='16px'
+                    h='170px'
+                    w='100%'>
+                    <IconBox width='35px' h='35px' bg='white' mb='auto'>
+                      <QuestionIcon color='teal.300' h='18px' w='18px' />
+                    </IconBox>
+                    <Text
+                      fontSize='sm'
+                      color='white'
+                      fontWeight='bold'
+                      display='block'>
+                      Need help?
+                    </Text>
+                    <Text fontSize='xs' color='white' mb='10px' display='block'>
+                      Please check our docs
+                    </Text>
+                    <Link
+                      w='100%'
+                      href='https://demos.creative-tim.com/docs-purity-ui-dashboard/'>
+                      <Button
+                        fontSize='10px'
+                        fontWeight='bold'
+                        w='100%'
+                        bg='white'
+                        _hover='none'
+                        _active={{
+                          bg: "white",
+                          transform: "none",
+                          borderColor: "transparent",
+                        }}
+                        _focus={{
+                          boxShadow: "none",
+                        }}
+                        color='black'
+                        display='block'>
+                        DOCUMENTATION
+                      </Button>
+                    </Link>
+                  </Flex>
+                </Box>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </>
+      </Box>
+    </Box>
   );
 }
 // PROPS

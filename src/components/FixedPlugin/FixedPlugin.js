@@ -1,3 +1,20 @@
+/*!
+
+=========================================================
+* Purity UI Dashboard PRO - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/purity-ui-dashboard-pro
+* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
+
+* Design by Creative Tim & Coded by Simmmple
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 // Chakra Imports
 import { Button, useColorModeValue } from "@chakra-ui/react";
 // Custom Icons
@@ -10,10 +27,6 @@ export default function FixedPlugin(props) {
   // Chakra Color Mode
   let navbarIcon = useColorModeValue("gray.500", "gray.200");
   let bgButton = useColorModeValue("white", "gray.600");
-  let fixedDisplay = "flex";
-  if (props.secondary) {
-    fixedDisplay = "none";
-  }
 
   const settingsRef = React.useRef();
   return (
